@@ -2,13 +2,13 @@ import { styled, Tooltip, Typography } from "@mui/material";
 import { FlexboxProps, useMediaQuery } from "@mui/system";
 import Avatar from "components/Avatar";
 import ProfileLink from "components/ProfileLink/ProfileLink";
+import RelativeTime from "components/RelativeTime";
 import StrongVerificationBadge from "components/StrongVerificationBadge";
 import { useImpressionRef, useLogEvent } from "features/analytics/hooks";
 import { useSearchAnalytics } from "features/analytics/searchAnalyticsContext";
 import { makeResultId, setSearchReferrer } from "features/analytics/searchAttribution";
 import { ResponseRateText } from "features/profile/view/userLabels";
 import { useTranslation } from "i18n";
-import { localizeRelativeTime } from "i18n/datetimes";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
 import { TFunction } from "i18next";
 import { SearchUser } from "proto/search_pb";
@@ -177,10 +177,7 @@ const SearchResultUserCard = ({
   user,
 }: SearchResultUserCardProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const {
-    t,
-    i18n: { language: locale },
-  } = useTranslation([GLOBAL, PROFILE]);
+  const { t } = useTranslation([GLOBAL, PROFILE]);
 
   const analytics = useSearchAnalytics();
   const logEvent = useLogEvent();
@@ -287,13 +284,13 @@ const SearchResultUserCard = ({
         <FlexRow alignItems="flex-end" justifyContent="space-between" sx={{ marginTop: 1.5 }}>
           <UserDetailsRow>
             <Typography variant="body2">
-              {user.lastActive
-                ? `${t("profile:active")}: ` +
-                  localizeRelativeTime(user.lastActive, locale, {
-                    smallestUnit: "hours",
-                    t,
-                  })
-                : t("last_active_false")}
+              {user.lastActive ? (
+                <>
+                  {t("profile:active")}: <RelativeTime instant={user.lastActive} options={{ smallestUnit: "hours" }} />
+                </>
+              ) : (
+                t("last_active_false")
+              )}
             </Typography>
             <Typography variant="body2" sx={{ display: "flex" }}>
               {`${t("profile:response_rate_label")}: `}
