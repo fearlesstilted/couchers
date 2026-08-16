@@ -134,9 +134,7 @@ export default function EditLocationMap({
     const source = map.current.getSource("circle") as GeoJSONSource | undefined;
     if (!source) return;
     if (!exact) {
-      source.setData(
-        circleGeoJson(extractLngLat(location.current), location.current.radius),
-      );
+      source.setData(circleGeoJson(extractLngLat(location.current), location.current.radius));
     } else {
       source.setData(pointGeoJson(extractLngLat(location.current)));
     }
@@ -231,9 +229,7 @@ export default function EditLocationMap({
           // Record the grant so search can bias results (LOC-3) on browsers whose
           // Permissions API can't report geolocation state (Safari).
           markGeolocationGranted();
-          flyToSearch(
-            new LngLat(position.coords.longitude, position.coords.latitude),
-          );
+          flyToSearch(new LngLat(position.coords.longitude, position.coords.latitude));
         });
       }
     });
